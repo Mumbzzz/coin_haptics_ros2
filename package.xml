@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>coin_haptics_ros2</name>
+  <version>0.0.0</version>
+  <description>ROS 2 interface for taxel-driven coin vibration motors. Provides per-finger taxel processing and a centralized serial motor driver for scalable multi-taxel haptic feedback experiments. </description>
+  <maintainer email="mwhidby@g.ucla.edu">Mumbzzz</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>std_msgs_stamped</depend>
+  <depend>tactile_sensor_msgs</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
