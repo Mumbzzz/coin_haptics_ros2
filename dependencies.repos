@@ -1,0 +1,16 @@
+repositories:
+
+  sensor_skin_ros2:
+    type: git
+    url: https://github.com/BiomechatronicsLab/sensor_skin_ros2.git
+    version: feature/develop
+
+  std_msgs_stamped:
+    type: git
+    url: https://github.com/BiomechatronicsLab/std_msgs_stamped.git
+    version: main
+
+  tactile_sensor_msgs:
+    type: git
+    url: https://github.com/BiomechatronicsLab/tactile_sensor_msgs.git
+    version: main
