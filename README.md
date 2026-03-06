@@ -140,12 +140,60 @@ motor
 ```
 
 ---
+## Running the System
+
+### Start the Serial Motor Node
+
+Before launching any finger processing nodes, start the serial node that communicates with the Arduino motor controller.
+
+```bash
+ros2 run coin_haptics_ros2 coin_motor_serial_node
+```
+This node:
+* Subscribes to `/coin_motor/<hand>/<finger>` topics
+* Aggregates stimulation values
+* Streams motor commands over serial to the Arduino controller
+
+
+### Start the TSS to Coin Motor Node
+
+Each finger requires a `tss_to_coin_motor_node` instance that converts tactile sensor data into motor stimulation.
+
+Example launch:
+```bash
+ros2 run coin_haptics_ros2 tss_to_coin_motor_node --ros-args
+```
+| Parameter                  | Description                                                     | Default          |
+| -------------------------- | --------------------------------------------------------------- | ---------------- |
+| `sensor_hand`              | Hand identifier used in topic naming                            | `right`          |
+| `finger_name`              | Finger associated with this node instance                       | `default_finger` |
+| `sensor_topic`             | Topic providing tactile sensor data                             | `/taxel_1`       |
+| `sensor_feature_val_index` | Index of the tactile feature value used from the sensor message | `1`              |
+| `tss_min`                  | Minimum tactile value used for scaling                          | `0.0`            |
+| `tss_max`                  | Maximum tactile value used for scaling                          | `0.07`           |
+| `tss_deadband_threshold`   | Deadband threshold below which stimulation is zero              | `0.003`          |
+
+Each finger should run its own node instance with the appropriate parameters.
+
+### Sensor Zero Calibration
+
+Each `tss_to_coin_motor_node` provides a service to reset the tactile sensor baseline.  
+Ensure the sensor is **not being touched**, then call:
+
+```bash
+ros2 service call /<hand>/<finger>/zero std_srvs/srv/Trigger
+```
+
+This resets the baseline used by the tactile processing node and begins collecting new reference samples.
+
+---
 
 ## Example: Launch a Single Finger Node
 
 Example for the **index finger**:
 
 ```bash
+ros2 run coin_haptics_ros2 coin_motor_serial_node
 ros2 run coin_haptics_ros2 tss_to_coin_motor_node \
   --ros-args \
   -p sensor_hand:=right \
@@ -153,11 +201,15 @@ ros2 run coin_haptics_ros2 tss_to_coin_motor_node \
   -p sensor_topic:=/taxel_1
 ```
 
+if necessary, 
+```bash
+ros2 service call /right/index/zero std_srvs/srv/Trigger
+```
+
 This configuration assumes:
 
 * The index motor driver is wired to **Arduino D5**
 * The index taxel publishes on **/taxel_1**
-* The serial node is already running
 
 ---
 
